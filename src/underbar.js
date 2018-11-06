@@ -113,6 +113,42 @@
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array, isSorted, iterator) {
+    var resultArr = [];
+    var boolArr = []
+    if(arguments.length === 2 && typeof isSorted === 'function') {
+      iterator = isSorted
+      for(var i = 0; i < array.length; i++) {
+        var boolResult = iterator(array[i])
+        if(!boolArr.includes(boolResult)) {
+          resultArr.push(array[i]);
+        }
+      }
+    }else if(arguments.length === 3 && isSorted === false) {
+      for(var i = 0; i < array.length; i++) {
+        var boolResult = iterator(array[i])
+        if(!boolArr.includes(boolResult)) {
+          resultArr.push(array[i]);
+        }
+      }
+    }else if(arguments.length === 3 && isSorted === true) {
+      for(var i = 0; i < array.length; i++) {
+        if(array[i] === array[i + 1]) {
+          continue
+        }
+        var boolResult = iterator(array[i])
+        if(!boolArr.includes(boolResult)) {
+          boolArr.push(boolResult)
+          resultArr.push(array[i]);
+        }
+      }
+    }else{
+      for(var i = 0; i < array.length; i++) {
+        if(!resultArr.includes(array[i])) {
+          resultArr.push(array[i]);
+        }
+      }
+    }
+    return resultArr;
   };
 
 
@@ -170,16 +206,13 @@
     if(accumulator === undefined) {
       accumulator = collection[0];
       collection = collection.slice(1)
-      console.log(collection)
     }
-    for(var i = 0; i < collection.length; i++){
-      accumulator = iterator(accumulator, collection[i], collection)
-    }
-    // _.each(collection, function(accumulator, item) {
-    //   console.log("before", accumulator)
-    //   accumulator += iterator(item)
-    //   console.log("after", accumulator)
-    // })
+    // for(var i = 0; i < collection.length; i++){
+    //   accumulator = iterator(accumulator, collection[i], collection)
+    // }
+    _.each(collection, function(item) {
+      accumulator = iterator(accumulator, item, collection)
+    })
     return accumulator;
   };
 
