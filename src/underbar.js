@@ -310,7 +310,14 @@
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
-
+    for(var i = 1; i<arguments.length; i++){
+      for(var key in arguments[i]){
+        if(!(key in obj)){
+          obj[key] = arguments[i][key]
+        }
+      }
+    }
+    return obj
   };
 
 
@@ -324,6 +331,7 @@
 
   // Return a function that can be called at most one time. Subsequent calls
   // should return the previously returned value.
+  
   _.once = function(func) {
     // TIP: These variables are stored in a "closure scope" (worth researching),
     // so that they'll remain available to the newly-generated function every
@@ -353,8 +361,25 @@
   // _.memoize should return a function that, when called, will check if it has
   // already computed the result for the given argument and return that value
   // instead if possible.
+  //addTwo(num) {
+    // return num + 2 => 4
+  
+  
   _.memoize = function(func) {
+    var cache = {}
+    return function () {
+      var args = JSON.stringify(arguments);
+      if(args in cache){
+        return cache[args];
+      } else {
+        var result = func.apply(this, arguments);
+        cache[args] = result;
+        return result;
+      }
+    }
   };
+  
+  
 
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
@@ -363,7 +388,7 @@
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
-    
+    return setTimeout(...arguments);
   };
 
 
@@ -378,9 +403,23 @@
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+    var newArr = array.slice();
+    
+    for(var i = 0; i < array.length; i++){
+      var random  = Math.floor(Math.random()*array.length);
+      var temp = newArr[i];
+      newArr[i] = newArr[random];
+      newArr[random] = temp;
+    }
+    return newArr
+    
     
   };
+/*
 
+
+
+*/
 
   /**
    * ADVANCED
