@@ -232,13 +232,50 @@
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
+    // iterator = iterator || _.identity;
+    if(!iterator){ // why do we have to explicitly state iterator?
+      iterator = _.identity
+    }
+    return _.reduce(collection, function(acc, item) {
+      if(!acc) {
+        return false; 
+      }
+      return Boolean(iterator(item));
+      // if(!iterator(item)) {
+      //   return false; // this sets the value of the acc
+      // }else{
+      //   return true; // this sets the value of the acc
+      // }
+    }, true) 
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
+    // debugger;
     // TIP: There's a very clever way to re-use every() here.
+    if(!iterator){ // why do we have to explicitly state iterator?
+      iterator = _.identity
+    }
+    return !_.every(collection, function(item){
+            return !iterator(item);
+    } )
+    // if(!iterator){ // why do we have to explicitly state iterator?
+    //   iterator = _.identity
+    // }
+    // return _.reduce(collection, function(acc, item) {
+    //   if(acc) {
+    //     return true; 
+    //   }
+    //   return Boolean(iterator(item));
+    //   // if(!iterator(item)) {
+    //   //   return false; // this sets the value of the acc
+    //   // }else{
+    //   //   return true; // this sets the value of the acc
+    //   // }
+    // }, false)  
   };
+  
 
 
   /**
@@ -260,11 +297,20 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    for(var i = 1; i < arguments.length; i++){
+      for(var key in arguments[i]){
+        obj[key] = arguments[i][key]
+      }
+      
+    }
+    return obj
+
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+
   };
 
 
@@ -317,6 +363,7 @@
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    
   };
 
 
@@ -331,6 +378,7 @@
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+    
   };
 
 
